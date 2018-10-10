@@ -1,0 +1,23 @@
+---
+- hosts: 127.0.0.1
+  become: yes
+  connection: local
+  vars:
+   image: tkachenko:0.0.3
+  tasks:
+     - name: Build the image
+       docker_image:
+        name: '{{ image }}'
+        path: .
+       register: image_build
+
+     - name: Create nginx container
+       docker_container:
+        name: nginx
+        image: '{{ image }}'
+        state: started
+        ports:
+           - "8082:80"
+
+
+
